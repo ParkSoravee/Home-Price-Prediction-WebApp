@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'main_form_screen.dart';
+import 'home_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color.fromRGBO(14, 42, 71, 1),
         fontFamily: 'Prompt',
       ),
-      home: MainFormScreen(),
+      home: HomeScreen(),
     );
   }
 }
