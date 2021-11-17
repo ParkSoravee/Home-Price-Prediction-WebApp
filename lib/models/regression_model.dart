@@ -79,10 +79,9 @@ class RegressionModel {
     var answer = 0.0;
     for (var i = 0; i < _models.length; i++) {
       answer += _models[i].coef * models[i].val;
-      print('${_models[i].varName} : ${models[i].val}');
+      print('${_models[i].varName} : ${models[i].val}'); // Debug
     }
     answer += _cons;
-    // _printVal();
     return answer;
   }
 
@@ -91,10 +90,4 @@ class RegressionModel {
   //     _models[i].val = 0.0;
   //   }
   // }
-
-  void _printVal() {
-    for (var i = 0; i < _models.length; i++) {
-      print('${_models[i].varName} : ${_models[i].val}');
-    }
-  }
 }

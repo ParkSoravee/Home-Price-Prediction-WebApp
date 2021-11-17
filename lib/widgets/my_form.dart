@@ -15,6 +15,7 @@ class MyForm extends StatefulWidget {
 class _MyFormState extends State<MyForm> {
   final models = RegressionModel().items;
   final _form = GlobalKey<FormState>();
+  final _yearFocusNode = FocusNode();
   var predictPrice = 0.0;
 
   void _saveForm() {
@@ -22,9 +23,7 @@ class _MyFormState extends State<MyForm> {
     if (!isValid) {
       return;
     }
-
     _form.currentState!.save();
-
     predictPrice = RegressionModel().calculateModel(models);
     showDialog(
       context: context,
@@ -42,8 +41,8 @@ class _MyFormState extends State<MyForm> {
         actions: [
           TextButton(
             onPressed: () {
+              clearForm();
               Navigator.pop(context);
-              // resetValue(); TODO: Here
             },
             child: Text(
               'Reset',
@@ -51,13 +50,19 @@ class _MyFormState extends State<MyForm> {
             ),
           ),
           TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Okay')),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Okay'),
+          ),
         ],
       ),
     );
+  }
+
+  void clearForm() {
+    _form.currentState!.reset();
+    _yearFocusNode.unfocus();
   }
 
   String? Function(String?)? validate(String title) {
@@ -179,6 +184,7 @@ class _MyFormState extends State<MyForm> {
             validator: validate(models[5].title),
           ),
           TextFormField(
+            focusNode: _yearFocusNode,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: models[6].title,
