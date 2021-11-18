@@ -16,12 +16,16 @@ class TitleBar extends StatelessWidget {
           Flexible(
             flex: 2,
             child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               height: double.infinity,
               child: FittedBox(
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 5, bottom: 5),
+                      padding: const EdgeInsets.only(
+                        right: 5,
+                        bottom: 5,
+                      ),
                       child: Icon(
                         CupertinoIcons.house_alt_fill,
                         color: Colors.white,

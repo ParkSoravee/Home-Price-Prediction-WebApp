@@ -28,9 +28,13 @@ class _MyFormState extends State<MyForm> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Home price prediction...'),
+        title: Text(predictPrice >= 3000
+            ? 'Home price prediction...'
+            : 'Something went wrong...'),
         content: Text(
-          '${predictPrice.toInt()} \$',
+          predictPrice >= 3000
+              ? '${predictPrice.toInt()} \$'
+              : 'Please try enter another values.',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Theme.of(context).primaryColor,
@@ -111,7 +115,16 @@ class _MyFormState extends State<MyForm> {
               if (value == null) return;
               models[0].setVal(double.parse(value));
             },
-            validator: validate(models[0].title),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter ${models[0].title}.';
+              }
+              if (double.tryParse(value) == null ||
+                  double.parse(value) % 1 != 0 ||
+                  double.parse(value) < 1) {
+                return 'Please enter a valid number of ${models[0].title}.';
+              }
+            },
           ),
           TextFormField(
             keyboardType: TextInputType.number,
@@ -125,7 +138,16 @@ class _MyFormState extends State<MyForm> {
               if (value == null) return;
               models[1].setVal(double.parse(value));
             },
-            validator: validateNotEqualZero(models[1].title),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter ${models[1].title}.';
+              }
+              if (double.tryParse(value) == null ||
+                  double.parse(value) % 0.5 != 0 ||
+                  double.parse(value) < 1) {
+                return 'Please enter a valid number of ${models[1].title}.';
+              }
+            },
           ),
           TextFormField(
             keyboardType: TextInputType.number,
@@ -139,7 +161,16 @@ class _MyFormState extends State<MyForm> {
               if (value == null) return;
               models[2].setVal(double.parse(value));
             },
-            validator: validateNotEqualZero(models[2].title),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter ${models[2].title}.';
+              }
+              if (double.tryParse(value) == null ||
+                  double.parse(value) % 0.5 != 0 ||
+                  double.parse(value) < 1) {
+                return 'Please enter a valid number of ${models[2].title}.';
+              }
+            },
           ),
           TextFormField(
             keyboardType: TextInputType.number,
@@ -153,7 +184,17 @@ class _MyFormState extends State<MyForm> {
               if (value == null) return;
               models[3].setVal(double.parse(value));
             },
-            validator: validateNotEqualZero(models[3].title),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter ${models[3].title}.';
+              }
+              if (double.tryParse(value) == null || double.parse(value) < 1) {
+                return 'Please enter a valid number of ${models[3].title}.';
+              }
+              if (double.parse(value) < 300) {
+                return 'Area sqft should greater than 300.';
+              }
+            },
           ),
           TextFormField(
             keyboardType: TextInputType.number,
@@ -167,7 +208,17 @@ class _MyFormState extends State<MyForm> {
               if (value == null) return;
               models[4].setVal(double.parse(value));
             },
-            validator: validate(models[4].title),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter ${models[4].title}.';
+              }
+              if (double.tryParse(value) == null || double.parse(value) < 1) {
+                return 'Please enter a valid number of ${models[4].title}.';
+              }
+              if (double.parse(value) < 300) {
+                return 'Area sqft should greater than 300.';
+              }
+            },
           ),
           TextFormField(
             keyboardType: TextInputType.number,
@@ -181,7 +232,14 @@ class _MyFormState extends State<MyForm> {
               if (value == null) return;
               models[5].setVal(double.parse(value));
             },
-            validator: validate(models[5].title),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter ${models[5].title}.';
+              }
+              if (double.tryParse(value) == null || double.parse(value) < 0) {
+                return 'Please enter a valid number of ${models[5].title}.';
+              }
+            },
           ),
           TextFormField(
             focusNode: _yearFocusNode,
@@ -200,11 +258,14 @@ class _MyFormState extends State<MyForm> {
               if (value == null || value.isEmpty) {
                 return 'Please enter ${models[6].title}.';
               }
-              if (double.tryParse(value) == null) {
-                return 'Please enter a valid number.';
+              final yrOld = 2021 - double.parse(value);
+              if (double.parse(value) < 1900) {
+                return 'Year-build should not less than 1900.';
               }
-              if (2021 - double.parse(value) <= 0) {
-                return 'Please enter a positive number.';
+              if (double.tryParse(value) == null ||
+                  yrOld <= 0 ||
+                  double.parse(value) % 1 != 0) {
+                return 'Please enter a valid number of ${models[6].title}.';
               }
             },
           ),

@@ -1,5 +1,3 @@
-import 'package:house_price_prediction/models/userInput_model.dart';
-
 class VariableModel {
   final String varName;
   final double coef;
@@ -79,7 +77,7 @@ class RegressionModel {
     var answer = 0.0;
     for (var i = 0; i < _models.length; i++) {
       answer += _models[i].coef * models[i].val;
-      print('${_models[i].varName} : ${models[i].val}'); // Debug
+      // print('${_models[i].varName} : ${models[i].val}'); // Debug
     }
     answer += _cons;
     return answer;
