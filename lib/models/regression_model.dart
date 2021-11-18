@@ -24,48 +24,48 @@ class RegressionModel {
   final _models = [
     VariableModel(
       varName: "bedroom",
-      coef: 1,
+      coef: -82687.870467,
       title: "Bedrooms",
       unit: "ห้อง",
     ),
     VariableModel(
       varName: "bathroom",
-      coef: 2,
+      coef: 69699.476130,
       title: "Bathrooms",
       unit: "ห้อง",
     ),
     VariableModel(
       varName: "floor",
-      coef: 4,
+      coef: 55738.325568,
       title: "Floors",
       unit: "ชั้น",
     ),
     VariableModel(
       varName: "sqft_living",
-      coef: 3,
+      coef: 213.936651,
       title: "พื้นที่บริเวณบ้าน",
       unit: "ตารางฟุต",
     ),
     VariableModel(
       varName: "sqft_above",
-      coef: 5,
+      coef: 111.623412,
       title: "พื้นที่ดาดฟ้า",
       unit: "ตารางฟุต",
     ),
     VariableModel(
       varName: "sqft_basement",
-      coef: 6,
+      coef: 102.313238,
       title: "พื้นที่ห้องใต้ดิน",
       unit: "ตารางฟุต",
     ),
     VariableModel(
       varName: "yr_old",
-      coef: 7,
+      coef: 3561.951189,
       title: "ปีที่สร้าง",
       unit: "ค.ศ.",
     ),
   ];
-  final double _cons = -1.0;
+  final double _cons = -258646.998249;
 
   List<VariableModel> get items {
     return [..._models];
