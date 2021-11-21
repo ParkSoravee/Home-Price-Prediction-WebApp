@@ -88,16 +88,38 @@ class _MyFormState extends State<MyForm> {
               ? 'Home price prediction...'
               : 'Something went wrong...',
         ),
-        content: Text(
-          predictPrice >= 3000
-              ? '${predictPrice.toInt()} \$'
-              : 'Please try enter another values.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: () {},
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                child: Text(
+                  '\$',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 3,
+            ),
+            Text(
+              predictPrice >= 3000
+                  ? '${predictPrice.toInt()}'
+                  : 'Please try enter another values.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         actions: [
           TextButton(
