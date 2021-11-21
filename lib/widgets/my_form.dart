@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../models/regression_model.dart';
 
+enum Areamode {
+  sqft,
+  sqmt,
+  sqinch,
+  sqWah,
+}
+
 class MyForm extends StatefulWidget {
   // final Function submit;
   const MyForm({Key? key}) : super(key: key);
@@ -17,6 +24,54 @@ class _MyFormState extends State<MyForm> {
   final _form = GlobalKey<FormState>();
   final _yearFocusNode = FocusNode();
   var predictPrice = 0.0;
+  Areamode _areaMode = Areamode.sqft;
+
+  Widget areaButton() {
+    var _modeText = '';
+    if (_areaMode == Areamode.sqft) {
+      _modeText = 'ตารางฟุต';
+    } else if (_areaMode == Areamode.sqmt) {
+      _modeText = 'ตารางเมตร';
+    } else if (_areaMode == Areamode.sqWah) {
+      _modeText = 'ตารางวา';
+    } else if (_areaMode == Areamode.sqinch) {
+      _modeText = 'ตารางนิ้ว';
+    }
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          if (_areaMode == Areamode.sqft) {
+            _areaMode = Areamode.sqWah;
+          } else if (_areaMode == Areamode.sqWah) {
+            _areaMode = Areamode.sqmt;
+          } else if (_areaMode == Areamode.sqmt) {
+            _areaMode = Areamode.sqinch;
+          } else if (_areaMode == Areamode.sqinch) {
+            _areaMode = Areamode.sqft;
+          }
+        });
+      },
+      child: Text(_modeText),
+    );
+  }
+
+  double toSqft(double value) {
+    var _areaSqft = value;
+    if (_areaMode != Areamode.sqft) {
+      if (_areaMode == Areamode.sqmt) {
+        _areaSqft *= 10.76391042;
+      } else if (_areaMode == Areamode.sqWah) {
+        _areaSqft *= 43.0;
+      } else if (_areaMode == Areamode.sqinch) {
+        _areaSqft /= 144.0;
+      }
+    }
+    return _areaSqft;
+  }
+
+  void saveArea(VariableModel model, double value) {
+    model.setVal(toSqft(value));
+  }
 
   void _saveForm() {
     final isValid = _form.currentState!.validate();
@@ -28,9 +83,11 @@ class _MyFormState extends State<MyForm> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(predictPrice >= 3000
-            ? 'Home price prediction...'
-            : 'Something went wrong...'),
+        title: Text(
+          predictPrice >= 3000
+              ? 'Home price prediction...'
+              : 'Something went wrong...',
+        ),
         content: Text(
           predictPrice >= 3000
               ? '${predictPrice.toInt()} \$'
@@ -103,6 +160,7 @@ class _MyFormState extends State<MyForm> {
       key: _form,
       child: Column(
         children: [
+          // Bedrooms
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -126,6 +184,7 @@ class _MyFormState extends State<MyForm> {
               }
             },
           ),
+          // Bathroom
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -149,6 +208,7 @@ class _MyFormState extends State<MyForm> {
               }
             },
           ),
+          // Floor
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -172,17 +232,20 @@ class _MyFormState extends State<MyForm> {
               }
             },
           ),
+          // Area Living
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: models[3].title,
               icon: Icon(CupertinoIcons.house),
               border: InputBorder.none,
-              suffixText: models[3].unit,
+              // suffixText: models[3].unit,
+              suffix: areaButton(),
             ),
             onSaved: (value) {
               if (value == null) return;
-              models[3].setVal(double.parse(value));
+              // models[3].setVal(double.parse(value));
+              saveArea(models[3], double.parse(value));
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -191,46 +254,52 @@ class _MyFormState extends State<MyForm> {
               if (double.tryParse(value) == null || double.parse(value) < 1) {
                 return 'Please enter a valid number of ${models[3].title}.';
               }
-              if (double.parse(value) < 300) {
-                return 'Area sqft should greater than 300.';
+              if (toSqft(double.parse(value)) < 300) {
+                return 'Area too little.';
               }
             },
           ),
+          // Area above
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: models[4].title,
               icon: Icon(Icons.square_foot),
               border: InputBorder.none,
-              suffixText: models[4].unit,
+              // suffixText: models[4].unit,
+              suffix: areaButton(),
             ),
             onSaved: (value) {
               if (value == null) return;
-              models[4].setVal(double.parse(value));
+              // models[4].setVal(double.parse(value));
+              saveArea(models[4], double.parse(value));
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter ${models[4].title}.';
               }
-              if (double.tryParse(value) == null || double.parse(value) < 1) {
+              if (double.tryParse(value) == null || double.parse(value) < 0) {
                 return 'Please enter a valid number of ${models[4].title}.';
               }
-              if (double.parse(value) < 300) {
-                return 'Area sqft should greater than 300.';
-              }
+              // if (toSqft(double.parse(value)) < 0) {
+              //   return 'Area too little than the standard.';
+              // }
             },
           ),
+          // Area basement
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: models[5].title,
               icon: Icon(Icons.meeting_room_rounded),
               border: InputBorder.none,
-              suffixText: models[5].unit,
+              // suffixText: models[5].unit,
+              suffix: areaButton(),
             ),
             onSaved: (value) {
               if (value == null) return;
-              models[5].setVal(double.parse(value));
+              // models[5].setVal(double.parse(value));
+              saveArea(models[5], double.parse(value));
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -241,6 +310,7 @@ class _MyFormState extends State<MyForm> {
               }
             },
           ),
+          // Year build
           TextFormField(
             focusNode: _yearFocusNode,
             keyboardType: TextInputType.number,
