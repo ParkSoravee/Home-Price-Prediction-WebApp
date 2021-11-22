@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:house_price_prediction/widgets/my_dialog.dart';
 
 import '../models/regression_model.dart';
 
@@ -82,64 +83,7 @@ class _MyFormState extends State<MyForm> {
     predictPrice = RegressionModel().calculateModel(models);
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(
-          predictPrice >= 3000
-              ? 'Home price prediction...'
-              : 'Something went wrong...',
-        ),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                child: Text(
-                  '\$',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 3,
-            ),
-            Text(
-              predictPrice >= 3000
-                  ? '${predictPrice.toInt()}'
-                  : 'Please try enter another values.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              clearForm();
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Reset',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Okay'),
-          ),
-        ],
-      ),
+      builder: (ctx) => MyDialog(predictPrice, clearForm),
     );
   }
 
